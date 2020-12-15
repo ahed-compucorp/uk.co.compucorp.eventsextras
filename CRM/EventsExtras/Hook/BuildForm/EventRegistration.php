@@ -35,24 +35,34 @@ class CRM_EventsExtras_Hook_BuildForm_EventRegistration extends CRM_EventsExtras
     $defaults = [];
 
     $showPendingParticipantExpiration = SettingsManager::SETTING_FIELDS['PENDING_PARTICIPANT_EXPIRATION'];
-    $settings = [$showPendingParticipantExpiration];
+    $pendingParticipantExpirationDefault = SettingsManager::SETTING_FIELDS['PENDING_PARTICIPANT_EXPIRATION_DEFAULT'];
+    $settings = [$showPendingParticipantExpiration, $pendingParticipantExpirationDefault];
     $settingValues = SettingsManager::getSettingsValue($settings);
     if ($settingValues[$showPendingParticipantExpiration] == 0) {
+      $defaults['expiration_time'] = $settingValues[$pendingParticipantExpirationDefault];
       $this->hideField('expiration_time');
     }
 
     $showAllowSelfServiceAction = SettingsManager::SETTING_FIELDS['ALLOW_SELF_SERVICE'];
-    $settings = [$showAllowSelfServiceAction];
+    $allowSelfServiceActionDefault = SettingsManager::SETTING_FIELDS['ALLOW_SELF_SERVICE_DEFAULT'];
+    $timeLimit = SettingsManager::SETTING_FIELDS['ALLOW_SELF_SERVICE_DEFAULT_TIME_LIMIT'];
+    $settings = [$showAllowSelfServiceAction, $allowSelfServiceActionDefault, $timeLimit];
     $settingValues = SettingsManager::getSettingsValue($settings);
     if ($settingValues[$showAllowSelfServiceAction] == 0) {
+      $defaults['allow_selfcancelxfer'] = $settingValues[$allowSelfServiceActionDefault];
+      $defaults['selfcancelxfer_time'] = $settingValues[$timeLimit];
       $this->hideField('allow_selfcancelxfer');
       $this->hideField('selfcancelxfer_time');
     }
 
     $showRegisterMultipleParticipants = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS'];
-    $settings = [$showRegisterMultipleParticipants];
+    $registerMultipleParticipantsDefault = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS_DEFAULT'];
+    $maximumParticipant = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS_DEFAULT_MAXIMUM_PARTICIPANT'];
+    $settings = [$showRegisterMultipleParticipants, $registerMultipleParticipantsDefault, $maximumParticipant];
     $settingValues = SettingsManager::getSettingsValue($settings);
     if ($settingValues[$showRegisterMultipleParticipants] == 0) {
+      $defaults['is_multiple_registrations'] = $settingValues[$registerMultipleParticipantsDefault];
+      $defaults['max_additional_participants'] = $settingValues[$maximumParticipant];
       $this->hideField('is_multiple_registrations');
       $this->hideField('max_additional_participants');
     }
