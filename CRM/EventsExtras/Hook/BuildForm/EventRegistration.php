@@ -24,7 +24,41 @@ class CRM_EventsExtras_Hook_BuildForm_EventRegistration extends CRM_EventsExtras
     if (!$this->shouldHandle($formName, CRM_Event_Form_ManageEvent_Registration::class)) {
       return;
     }
-    $this->hideField($form);
+    $this->buildForm($formName, $form);
+  }
+
+  private function buildForm($formName, &$form) {
+    $this->setDefaults($form);
+  }
+
+  private function setDefaults(&$form) {
+    $defaults = [];
+
+    $showPendingParticipantExpiration = SettingsManager::SETTING_FIELDS['PENDING_PARTICIPANT_EXPIRATION'];
+    $settings = [$showPendingParticipantExpiration];
+    $settingValues = SettingsManager::getSettingsValue($settings);
+    if ($settingValues[$showPendingParticipantExpiration] == 0) {
+      $this->hideField('expiration_time');
+    }
+
+    $showAllowSelfServiceAction = SettingsManager::SETTING_FIELDS['ALLOW_SELF_SERVICE'];
+    $settings = [$showAllowSelfServiceAction];
+    $settingValues = SettingsManager::getSettingsValue($settings);
+    if ($settingValues[$showAllowSelfServiceAction] == 0) {
+      $this->hideField('allow_selfcancelxfer');
+      $this->hideField('selfcancelxfer_time');
+    }
+
+    $showRegisterMultipleParticipants = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS'];
+    $settings = [$showRegisterMultipleParticipants];
+    $settingValues = SettingsManager::getSettingsValue($settings);
+    if ($settingValues[$showRegisterMultipleParticipants] == 0) {
+      $this->hideField('is_multiple_registrations');
+      $this->hideField('max_additional_participants');
+    }
+
+    $form->setDefaults($defaults);
+
   }
 
 }
