@@ -58,13 +58,16 @@ class CRM_EventsExtras_Hook_BuildForm_EventRegistration extends CRM_EventsExtras
     $showRegisterMultipleParticipants = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS'];
     $registerMultipleParticipantsDefault = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS_DEFAULT'];
     $maximumParticipant = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS_DEFAULT_MAXIMUM_PARTICIPANT'];
-    $settings = [$showRegisterMultipleParticipants, $registerMultipleParticipantsDefault, $maximumParticipant];
+    $allowSameParticipantEmailsDefault = SettingsManager::SETTING_FIELDS['REGISTER_MULTIPLE_PARTICIPANTS_ALLOW_SAME_PARTICIPANT_EMAILS_DEFAULT'];
+    $settings = [$showRegisterMultipleParticipants, $registerMultipleParticipantsDefault, $maximumParticipant, $allowSameParticipantEmailsDefault];
     $settingValues = SettingsManager::getSettingsValue($settings);
     if ($settingValues[$showRegisterMultipleParticipants] == 0) {
       $defaults['is_multiple_registrations'] = $settingValues[$registerMultipleParticipantsDefault];
       $defaults['max_additional_participants'] = $settingValues[$maximumParticipant];
+      $defaults['allow_same_participant_emails'] = $settingValues[$allowSameParticipantEmailsDefault];
       $this->hideField('is_multiple_registrations');
       $this->hideField('max_additional_participants');
+      $this->hideField('allow_same_participant_emails');
     }
 
     $form->setDefaults($defaults);
